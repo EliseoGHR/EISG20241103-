@@ -1,15 +1,21 @@
 ﻿@model IEnumerable<EISGG20241103.Models.Cliente>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Cliente";
 }
 
-<h1>Index</h1>
+<div class="row">
+    <div class="card">
+        <div class="card-header row">
+            <h1 class="card-text col-md-12">Compras</h1>
+        </div>
+        <div class="card-body row">
+            <p class="col-md-12">
+                <a class="btn btn-primary" style="width:100%;" asp-action="Create">Crear Cliente</a>
+            </p>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+            <div class="table-responsive col-md-12">
+                <table class="table table-striped table-hover table-secondary">
     <thead>
         <tr>
             <th>
@@ -43,11 +49,15 @@
                 @Html.DisplayFor(modelItem => item.Edad)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    <a asp-action="Edit" class="btn btn-success"  asp-route-id="@item.Id">Editar</a> |
+                                    <a asp-action="Details" class="btn btn-info"  asp-route-id="@item.Id">Detalle</a> |
+                                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">Eliminar</a>
             </td>
         </tr>
 }
     </tbody>
-</table>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -86,7 +86,7 @@ namespace EISGG20241103.Controllers
             var det = cliente.DetalleClientes[index];
             if (accion == "Edit" && det.Id > 0)
             {
-                det.Id = det.Id;
+                det.Id = det.Id -1;
             }
             else
             {
