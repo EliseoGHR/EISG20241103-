@@ -20,7 +20,9 @@ namespace EISGG20241103.Models
         [Required(ErrorMessage = "El apellido del cliente es obligatorio.")]
         public string Apellido { get; set; }
 
-        [EmailAddress(ErrorMessage = "Por favor, introduzca una dirección de correo electrónico válida.")]
+        [Required(ErrorMessage = "El Email es requerido")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "El Email El debe tener entre 2 y 50 caracteres")]
+        [EmailAddress(ErrorMessage = "El Email no es valido, por favor ingrese un Email válido.")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "La edad del cliente.")]

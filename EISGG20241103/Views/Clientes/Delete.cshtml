@@ -36,7 +36,9 @@
             @Html.DisplayFor(model => model.Edad)
         </dd>
     </dl>
-    
+    <div class="col-md-12" style="margin-top:10px;">
+        @await Html.PartialAsync("_DetalleClientes", Model.DetalleClientes)
+    </div>
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

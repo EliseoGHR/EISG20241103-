@@ -39,7 +39,9 @@
         </form>
     </div>
 </div>
-
+<div class="col-md-12" style="margin-top:10px;">
+    @await Html.PartialAsync("_DetalleClientes", Model.DetalleClientes)
+</div>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
