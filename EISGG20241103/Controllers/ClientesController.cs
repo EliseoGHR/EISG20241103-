@@ -86,7 +86,7 @@ namespace EISGG20241103.Controllers
             var det = cliente.DetalleClientes[index];
             if (accion == "Edit" && det.Id > 0)
             {
-                det.Id = det.Id -1;
+                det.Id = det.Id * -1;
             }
             else
             {
@@ -152,15 +152,16 @@ namespace EISGG20241103.Controllers
                    
                 }
                 // Obtener todos los detalles que seran eliminados y actualizar a la base de datos
-                var delDet = cliente.DetalleClientes.Where(s => s.Id < 0).ToList();
-                if (delDet != null && delDet.Count > 0)
+                var delDetIds = cliente.DetalleClientes.Where(s => s.Id < 0).Select(s => -s.Id).ToList();
+                if (delDetIds != null && delDetIds.Count > 0)
                 {
-                    foreach (var d in delDet)
+                    foreach (var detalleId in delDetIds) // Cambiado de 'id' a 'detalleId'
                     {
-                        d.Id = d.Id * -1;
-                        var det = clienteUpdate.DetalleClientes.FirstOrDefault(s => s.Id == d.Id);
-                        _context.Remove(det);
-                        // facturaUpdate.DetFacturaVenta.Remove(det);
+                        var det = await _context.DetalleClientes.FindAsync(detalleId); // Cambiado de 'id' a 'detalleId'
+                        if (det != null)
+                        {
+                            _context.DetalleClientes.Remove(det);
+                        }
                     }
                 }
                 _context.Update(clienteUpdate);
