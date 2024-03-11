@@ -11,13 +11,13 @@
             <th style="width:250px;">
                 @Html.DisplayNameFor(model => model.Telefono)
             </th>
-            <th>
+            <th style="text-align: right;">
                 @if (ViewBag.Accion == "Create" || ViewBag.Accion == "Edit")
                 {
                     <button type="submit" class="btn btn-primary" formaction="@Url.Action("AgregarDetalles")">Agregar</button>
                 }
 
-            </th>
+            </thstyle>
         </tr>
 
     </thead>
@@ -39,7 +39,7 @@
                             <input type="hidden" value="@item.ClienteId" name="DetalleClientes[@index].ClienteId">
                             <input class="form-control" data-readonly type="text" name="DetalleClientes[@index].Telefono" value="@item.Telefono">
                         </td>
-                        <td>
+                        <td style="text-align: right;">
                             @if (ViewBag.Accion == "Create" || ViewBag.Accion == "Edit")
                             {
                                 <button name="index" value="@index" class="btn btn-danger" type="submit" formaction="@Url.Action("EliminarDetalles")">Eliminar</button>
