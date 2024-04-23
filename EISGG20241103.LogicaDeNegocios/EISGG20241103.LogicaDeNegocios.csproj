@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EISGG20241103.AccesoADatos\EISGG20241103.AccesoADatos.csproj" />
+    <ProjectReference Include="..\EISGG20241103.EntidadesDeNegocio\EISGG20241103.EntidadesDeNegocio.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\Chello\source\repos\EISG20241103-\EISGG20241103.LogicaDeNegocios\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\Chello\source\repos\EISG20241103-\EISGG20241103.LogicaDeNegocios\.editorconfig" />
+  </ItemGroup>
+
+</Project>

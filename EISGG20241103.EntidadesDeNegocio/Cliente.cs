@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EISGG20241103.Models
+namespace EISGG20241103.EntidadesDeNegocio
 {
     public class Cliente
     {

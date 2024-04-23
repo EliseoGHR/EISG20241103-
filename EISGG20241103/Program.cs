@@ -1,12 +1,12 @@
-using EISGG20241103.Models;
+using EISGG20241103.LogicaDeNegocios;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<EISG20241103DBContext>(options =>
-       options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
+builder.Services.AddBLDependecies(builder.Configuration);
+
 
 var app = builder.Build();
 

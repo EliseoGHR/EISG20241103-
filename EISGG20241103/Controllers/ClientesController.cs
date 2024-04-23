@@ -5,43 +5,38 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using EISGG20241103.Models;
+//using EISGG20241103.Models;
+using EISGG20241103.LogicaDeNegocios;
+using EISGG20241103.EntidadesDeNegocio;
+
 
 namespace EISGG20241103.Controllers
 {
     public class ClientesController : Controller
     {
-        private readonly EISG20241103DBContext _context;
 
-        public ClientesController(EISG20241103DBContext context)
+        readonly ClienteBL _clienteBL;
+
+        public ClientesController(ClienteBL clienteBL)
         {
-            _context = context;
+            _clienteBL = clienteBL;
         }
-
         // GET: Clientes
+        //Existe dal
         public async Task<IActionResult> Index()
         {
-              return _context.Clientes != null ? 
-                          View(await _context.Clientes.ToListAsync()) :
-                          Problem("Entity set 'EISG20241103DBContext.Clientes'  is null.");
+            return View(await _clienteBL.ObtenerTodos());
         }
 
+        //Existe DAL
         // GET: Clientes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null || _context.Clientes == null)
-            {
-                return NotFound();
-            }
-
-            var cliente = await _context.Clientes
-                .Include(s=> s.DetalleClientes)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var cliente = await _clienteBL.ObtenerPorId(new Cliente { Id = id });
             if (cliente == null)
             {
                 return NotFound();
             }
-
             ViewBag.Accion = "Details";
             return View(cliente);
         }
@@ -64,14 +59,11 @@ namespace EISGG20241103.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //EXISTE A DAL
         public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,Email,Edad,DetalleClientes")] Cliente cliente)
         {
-        //    cliente.DetalleClientes.Add(new DetalleCliente { Telefono = ""});
-            _context.Add(cliente);
-            await _context.SaveChangesAsync();
+            await _clienteBL.Crear(cliente);
             return RedirectToAction(nameof(Index));
-            
-            //return View(cliente);
         }
         [HttpPost]
         public ActionResult AgregarDetalles([Bind("Id,Nombre,Apellido,Email,Edad,DetalleClientes")] Cliente cliente, string accion)
@@ -97,15 +89,10 @@ namespace EISGG20241103.Controllers
             return View(accion, cliente);
         }
         // GET: Clientes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        //EXISTE A DAL
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null || _context.Clientes == null)
-            {
-                return NotFound();
-            }
-
-            var cliente = await _context.Clientes
-                .Include(s=>s.DetalleClientes).FirstAsync(s=>s.Id==id);
+            var cliente = await _clienteBL.ObtenerPorId(new Cliente { Id = id });
             if (cliente == null)
             {
                 return NotFound();
@@ -113,7 +100,7 @@ namespace EISGG20241103.Controllers
             ViewBag.Accion = "Edit";
             return View(cliente);
         }
-
+        //Existe dal
         // POST: Clientes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -129,43 +116,7 @@ namespace EISGG20241103.Controllers
            
                 try
                 {
-                var clienteUpdate = await _context.Clientes
-                       .Include(s => s.DetalleClientes)
-                       .FirstAsync(s => s.Id == cliente.Id);
-                clienteUpdate.Nombre = cliente.Nombre;
-                clienteUpdate.Apellido = cliente.Apellido;
-                clienteUpdate.Email = cliente.Email;
-                clienteUpdate.Edad = cliente.Edad;
-
-                // Obtener todos los detalles que seran nuevos y agregarlos a la base de datos
-                var detNew = cliente.DetalleClientes.Where(s => s.Id == 0);
-                foreach (var d in detNew)
-                {
-                    clienteUpdate.DetalleClientes.Add(d);
-                }
-                // Obtener todos los detalles que seran modificados y actualizar a la base de datos
-                var detUpdate = cliente.DetalleClientes.Where(s => s.Id > 0);
-                foreach (var d in detUpdate)
-                {
-                    var det = clienteUpdate.DetalleClientes.FirstOrDefault(s => s.Id == d.Id);
-                    det.Telefono = d.Telefono;
-                   
-                }
-                // Obtener todos los detalles que seran eliminados y actualizar a la base de datos
-                var delDetIds = cliente.DetalleClientes.Where(s => s.Id < 0).Select(s => -s.Id).ToList();
-                if (delDetIds != null && delDetIds.Count > 0)
-                {
-                    foreach (var detalleId in delDetIds) // Cambiado de 'id' a 'detalleId'
-                    {
-                        var det = await _context.DetalleClientes.FindAsync(detalleId); // Cambiado de 'id' a 'detalleId'
-                        if (det != null)
-                        {
-                            _context.DetalleClientes.Remove(det);
-                        }
-                    }
-                }
-                _context.Update(clienteUpdate);
-                    await _context.SaveChangesAsync();
+                    await _clienteBL.Modificar(cliente);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -182,22 +133,16 @@ namespace EISGG20241103.Controllers
             
             //return View(cliente);
         }
-
+        //Existe dal
         // GET: Clientes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null || _context.Clientes == null)
-            {
-                return NotFound();
-            }
-
-            var cliente = await _context.Clientes
-                .Include(s=>s.DetalleClientes)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var cliente = await _clienteBL.ObtenerPorId(new Cliente { Id = id });
             if (cliente == null)
             {
                 return NotFound();
             }
+           
 
             ViewBag.Accion = "Delete";
             return View(cliente);
@@ -208,23 +153,13 @@ namespace EISGG20241103.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Clientes == null)
-            {
-                return Problem("Entity set 'EISG20241103DBContext.Clientes'  is null.");
-            }
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente != null)
-            {
-                _context.Clientes.Remove(cliente);
-            }
-            
-            await _context.SaveChangesAsync();
+            await _clienteBL.Eliminar(new Cliente { Id = id });
             return RedirectToAction(nameof(Index));
         }
 
         private bool ClienteExists(int id)
         {
-          return (_context.Clientes?.Any(e => e.Id == id)).GetValueOrDefault();
+            return _clienteBL.ClienteExists(id);
         }
     }
 }

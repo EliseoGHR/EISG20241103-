@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using EISGG20241103.EntidadesDeNegocio;
 
-namespace EISGG20241103.Models
+namespace EISGG20241103.AccesoADatos
+
 {
     public class EISG20241103DBContext : DbContext
     {
